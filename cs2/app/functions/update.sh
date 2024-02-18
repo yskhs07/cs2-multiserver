@@ -73,29 +73,62 @@ App::installSteamCMD () (
 	success <<< "SteamCMD installed successfully!"
 )
 
+
 App::installUpdater () {
 
-    App::installSteamCMD || return
-
-    out <<-EOF
+	App::installSteamCMD || return
+	
+	# Skip prompting for Steam username and proceed with anonymous login
+	out <<-EOF
 		
-        To install and update the CS2 game server, you need to log in to your
-        Steam account.
-    
+		To install and update the CS2 game server, you need to log in to your
+		Steam account.
 	EOF
 
-    out "Logging in anonymously..."
+	
+	#until [[ $SUCCESS ]]; do
+		local STEAMCMD_SCRIPT="$(mktemp)"
+		cat <<-EOF > "$STEAMCMD_SCRIPT"
+			login anonymous
+			quit
+		EOF
+	#	log-cmd "$HOME/Steam/steamcmd/steamcmd.sh" +runscript "$STEAMCMD_SCRIPT"
+	#	log <<< ""
+	#	local steamcfg="$HOME/Steam/config/config.vdf"
+	#	[[ -r $steamcfg ]] || steamcfg="$HOME/.steam/steam/config/config.vdf"
+	#	[[ -r $steamcfg ]] || steamcfg="$HOME/.steam/config/config.vdf"
+	#	grep "\"anonymous\"" "$steamcfg" >/dev/null 2>&1 && SUCCESS=1
+	#	echo "DEBUG: SUCCESS=$SUCCESS"
+	#	sleep 1  # Add a small delay for debugging
+	#done
 
-    # Login anonymously
-    ./steamcmd.sh +login anonymous +quit
-
-    # Check the exit status of the login command
-    if [ $? -eq 0 ]; then
-        success <<< "Steam login successful!"
-    else
-        error <<< "Failed to log in to Steam anonymously!"
-    fi
+	success <<< "Steam login successful!"
 }
+
+
+#App::installUpdater () {
+#
+#    App::installSteamCMD || return
+#
+#    out <<-EOF
+#		
+#        To install and update the CS2 game server, you need to log in to your
+#        Steam account.
+#    
+#	EOF
+#
+#    out "Logging in anonymously..."
+#
+#    # Login anonymously
+#    ./steamcmd.sh +login anonymous +quit
+#
+#    # Check the exit status of the login command
+#    if [ $? -eq 0 ]; then
+#        success <<< "Steam login successful!"
+#    else
+#        error <<< "Failed to log in to Steam anonymously!"
+#    fi
+#}
 
 
 App::printAdditionalConfig () {
