@@ -107,7 +107,7 @@ App::installUpdater () {
 
 
 App::printAdditionalConfig () {
-	echo "STEAM_USERNAME=$STEAM_USERNAME"
+	echo "STEAM_USERNAME=HS"
 }
 
 
@@ -130,7 +130,7 @@ App::isUpToDate () {
 	local STEAMCMD_SCRIPT="$TMPDIR/steamcmd-script"
 	local STEAMCMD_OUT="$TMPDIR/steamcmd-out"
 	cat <<-EOF > "$STEAMCMD_SCRIPT"
-		login $STEAM_USERNAME
+		login anonymous
 		app_info_update 1
 		app_info_print 730
 		quit
@@ -171,7 +171,7 @@ App::performUpdate () (
 	MSM_LOGFILE="$LOGDIR/$(timestamp)-$ACTION.log"
 	cat <<-EOF > "$STEAMCMD_SCRIPT"
 		force_install_dir "$INSTALL_DIR"
-		login $STEAM_USERNAME
+		login anonymous
 		app_update 730 $( [[ $ACTION == repair ]] && echo "validate" )
 		quit
 	EOF
