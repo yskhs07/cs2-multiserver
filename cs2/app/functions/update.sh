@@ -98,6 +98,8 @@ App::installUpdater () {
 		[[ -r $steamcfg ]] || steamcfg="$HOME/.steam/steam/config/config.vdf"
 		[[ -r $steamcfg ]] || steamcfg="$HOME/.steam/config/config.vdf"
 		grep "\"anonymous\"" "$steamcfg" >/dev/null 2>&1 && SUCCESS=1
+		echo "DEBUG: SUCCESS=$SUCCESS"
+		sleep 1  # Add a small delay for debugging
 	done
 
 	success <<< "Steam login successful!"
